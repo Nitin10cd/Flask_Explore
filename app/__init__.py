@@ -1,14 +1,24 @@
 from flask import Flask
-from routes.auth import auth_bp # login blue print we seperete the logic in routes 
+from flask_sqlalchemy import SQLAlchemy
 
-# create the function which creaes the flask app globally and return in the run.py
+db = SQLAlchemy()
+
+# create the function which creates the flask app globally
 def create_app():
-    # crete app
+    # create app
     app = Flask(__name__)
-    # genereate the secret key
-    app.secret_key = 'my-secret'
+    
+    # configure database
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # optional, to suppress warnings
+    
+    db.init_app(app)
+    
+    # generate the secret key
+    # app.secret_key = 'my-secret'
 
-    # register the blue print 
-    app.register_blueprint(auth_bp)
+    # register the blueprint
+    # from routes.auth import auth_bp
+    # app.register_blueprint(auth_bp)
 
     return app
